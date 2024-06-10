@@ -523,7 +523,7 @@ fn test_query_user_debt_v2() {
 
     let cm_user_id = UserId::credit_manager(cm_user.clone(), account_id.to_string());
     let cm_user_id_key: UserIdKey = cm_user_id.try_into().unwrap();
-    let rb_user_id = UserId::credit_manager(cm_user.clone(), "".to_string());
+    let rb_user_id = UserId::credit_manager(rb_user.clone(), "".to_string());
     let rb_user_id_key: UserIdKey = rb_user_id.try_into().unwrap();
 
     DEBTS.save(deps.as_mut().storage, (&rb_user_id_key, "coin_2"), &debt_2).unwrap();
