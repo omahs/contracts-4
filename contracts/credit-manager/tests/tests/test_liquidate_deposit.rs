@@ -14,8 +14,8 @@ use mars_types::{
 };
 
 use super::helpers::{
-    assert_err, get_coin, get_debt, lp_token_info, uatom_info, ujake_info, unlocked_vault_info,
-    uosmo_info, AccountToFund, MockEnv,
+    assert_err, get_coin, lp_token_info, uatom_info, ujake_info, unlocked_vault_info, uosmo_info,
+    AccountToFund, MockEnv,
 };
 
 // Reference figures behind various scenarios
@@ -368,6 +368,7 @@ fn liquidator_left_in_unhealthy_state() {
         &[],
     );
 
+    // TODO: Probably the new value is actually accurate. Might safely update the max ltv value
     assert_err(
         res,
         AboveMaxLTV {
@@ -513,7 +514,7 @@ fn target_health_factor_reached_after_max_debt_repayed() {
     assert_eq!(atom_balance.amount, Uint128::new(600));
 
     assert_eq!(position.debts.len(), 1);
-    let atom_debt = get_debt("uatom", &position.debts);
+    let atom_debt = get_coin("uatom", &position.debts);
     assert_eq!(atom_debt.amount, Uint128::new(496));
 
     // Assert liquidator's new position
@@ -609,7 +610,7 @@ fn debt_amount_adjusted_to_total_debt_for_denom() {
     assert_eq!(jake_balance.amount, Uint128::new(100));
 
     assert_eq!(position.debts.len(), 1);
-    let atom_debt = get_debt("uatom", &position.debts);
+    let atom_debt = get_coin("uatom", &position.debts);
     assert_eq!(atom_debt.amount, Uint128::new(1001));
 
     // Assert liquidator's new position
@@ -693,7 +694,7 @@ fn debt_amount_adjusted_to_max_allowed_by_request_coin() {
     assert_eq!(atom_balance.amount, Uint128::new(1000));
 
     assert_eq!(position.debts.len(), 1);
-    let atom_debt = get_debt("uatom", &position.debts);
+    let atom_debt = get_coin("uatom", &position.debts);
     assert_eq!(atom_debt.amount, Uint128::new(879));
 
     // Assert liquidator's new position
@@ -780,7 +781,7 @@ fn debt_amount_no_adjustment() {
     assert_eq!(atom_balance.amount, Uint128::new(1000));
 
     assert_eq!(position.debts.len(), 1);
-    let atom_debt = get_debt("uatom", &position.debts);
+    let atom_debt = get_coin("uatom", &position.debts);
     assert_eq!(atom_debt.amount, Uint128::new(901));
 
     // Assert liquidator's new position
@@ -876,9 +877,9 @@ fn improve_hf_but_acc_unhealthy() {
     assert_eq!(jake_balance.amount, Uint128::new(430));
 
     assert_eq!(position.debts.len(), 2);
-    let atom_debt = get_debt("uatom", &position.debts);
+    let atom_debt = get_coin("uatom", &position.debts);
     assert_eq!(atom_debt.amount, Uint128::new(1001));
-    let jake_debt = get_debt("ujake", &position.debts);
+    let jake_debt = get_coin("ujake", &position.debts);
     assert_eq!(jake_debt.amount, Uint128::new(311));
 
     // Assert liquidator's new position

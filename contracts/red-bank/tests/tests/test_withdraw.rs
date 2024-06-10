@@ -595,7 +595,7 @@ fn setup_health_check_test() -> HealthCheckTestSuite {
 
     denoms.iter().zip(debts.iter()).for_each(|(denom, debt)| {
         if !debt.amount_scaled.is_zero() {
-            DEBTS.save(deps.as_mut().storage, (&withdrawer_addr, denom), debt).unwrap();
+            DEBTS.save(deps.as_mut().storage, (&user_id_key, denom), debt).unwrap();
         }
     });
 
